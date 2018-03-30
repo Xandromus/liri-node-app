@@ -6,7 +6,7 @@ let Twitter = require('twitter');
 //let spotify = new Spotify(keys.spotify);
 let client = new Twitter(keys.twitter);
 
-let params = { screen_name: 'basementavatars', count: 20 };
+let params = { screen_name: 'basementavatars', count: 20, tweet_mode: 'extended' };
 
 
 let inputString = process.argv;
@@ -19,8 +19,8 @@ if (operand === "my-tweets") {
             let counter = tweets.length;
             console.log("The last " + counter + " tweets from " + tweets[0].user.name + " in ascending order:\n" + "-".repeat(60));
             tweets.forEach(function (tweet) {
-                console.log("\nTweet #" + counter + "\n" + "----------");
-                console.log(tweet.text.replace(/&amp;/g, '&') + "\n");
+                console.log("\nTweet #" + counter + "\n" + "-".repeat(10));
+                console.log(tweet.full_text.replace(/&amp;/g, '&') + "\n");
                 console.log(tweet.created_at + "\n");
                 counter--;
             });
