@@ -17,10 +17,25 @@ let operand = inputString[2];
 let trackName = inputString.slice(3).join(" ");
 let movieName = inputString.slice(3).join(" ");
 
-
-
 switch (operand) {
     case "my-tweets":
+      myTweets();
+      break;
+    
+    case "spotify-this-song":
+      spotifyThis();
+      break;
+    
+    case "movie-this":
+      movieThis();
+      break;
+    
+    case "do-what-it-says":
+      random();
+      break;
+    }
+
+function myTweets() {
         client
             .get('statuses/user_timeline/', params)
             .then(function (tweets) {
@@ -36,8 +51,9 @@ switch (operand) {
             .catch(function (error) {
                 throw error;
             })
-        break;
-    case "spotify-this-song":
+        }
+
+function spotifyThis() {
         if (!trackName) {
             trackName = "ace of base the sign";
         }
@@ -61,8 +77,9 @@ switch (operand) {
             .catch(function (err) {
                 console.log(err);
             });
-        break;
-    case "movie-this":
+        }
+
+   function movieThis() {
     if (!movieName) {
         movieName = "mr robot";
     }
@@ -87,6 +104,26 @@ switch (operand) {
             .catch(function (err) {
                 console.log(err);
             });
-        break;
+        }
+
+    function random() {
+    fs.readFile('random.txt', 'utf8')
+    .then(data => {
+        let randomTask = data.split(",");
+        switch (randomTask[0]) {
+        case "my-tweets":
+            myTweets();
+            break;
+        case "spotify-this-song":
+            trackName = randomTask[1];  
+            spotifyThis();
+            break;
+        case "movie-this":
+            movieName = randomTask[1];
+            movieThis();
+            break;
+        }
+    })
+    .catch(err => console.error(err))
 }
 
