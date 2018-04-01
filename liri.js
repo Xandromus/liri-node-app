@@ -1,4 +1,6 @@
 require("dotenv").config();
+let request = require('request');
+let rp = require('request-promise');
 let fs = require("fs-extra");
 let keys = require("./keys");
 let Twitter = require('twitter');
@@ -10,26 +12,12 @@ let client = new Twitter(keys.twitter);
 
 let params = { screen_name: 'basementavatars', count: 20, tweet_mode: 'extended' };
 
-
 let inputString = process.argv;
 let operand = inputString[2];
 let trackName = inputString.slice(3).join(" ");
+let movieName = inputString.slice(3).join(" ");
 
-// if (operand === "my-tweets") {
-//     client.get('statuses/user_timeline/', params, function (error,
-//         tweets, response) {
-//         if (!error) {
-//             let counter = tweets.length;
-//             console.log("The last " + counter + " tweets from " + tweets[0].user.name + " in ascending order:\n" + "-".repeat(60));
-//             tweets.forEach(function (tweet) {
-//                 console.log("\nTweet #" + counter + "\n" + "-".repeat(10));
-//                 console.log(tweet.full_text.replace(/&amp;/g, '&') + "\n");
-//                 console.log(moment(tweet.created_at, 'ddd MMM DD HH:mm:ss Z YYYY').format('MMMM Do YYYY, h:mm:ss a', moment.ISO_8601) + "\n");
-//                 counter--;
-//             });
-//         }
-//     });
-// }
+
 
 switch (operand) {
     case "my-tweets":
@@ -37,7 +25,7 @@ switch (operand) {
             .get('statuses/user_timeline/', params)
             .then(function (tweets) {
                 let counter = tweets.length;
-                console.log("The last " + counter + " tweets from " + tweets[0].user.name + " in ascending order:\n" + "-".repeat(60));
+                console.log("\nThe last " + counter + " tweets from " + tweets[0].user.name + " in ascending order:\n" + "-".repeat(60));
                 tweets.forEach(function (tweet) {
                     console.log("\nTweet #" + counter + "\n" + "-".repeat(10));
                     console.log(tweet.full_text.replace(/&amp;/g, '&') + "\n");
@@ -57,6 +45,7 @@ switch (operand) {
             .search({ type: 'track', query: trackName, limit: 1 })
             .then(function (response) {
                 let trackObj = JSON.parse(JSON.stringify(response.tracks.items[0], null, 2));
+                console.log("\nSpotify Song Information:\n" + "-".repeat(25) + "\n");
                 console.log("Artist(s):\n" + "-".repeat(10));
                 trackObj.artists.forEach(function (artist) {
                     console.log(artist.name);
@@ -68,6 +57,32 @@ switch (operand) {
                 } else {
                     console.log("\nPreview Link:\n" + "-".repeat(13) + "\nNo preview available for this song");
                 }
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+        break;
+    case "movie-this":
+    if (!movieName) {
+        movieName = "mr robot";
+    }
+    let queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+        rp(queryUrl)
+            .then(function (response) {
+                    let movieObj = JSON.parse(response);
+                    console.log("\nHere's a summary of the movie you searched for:\n" + "-".repeat(47));
+                    console.log("\nTitle:\n" + "-".repeat(6) + "\n" + movieObj.Title);
+                    console.log("\nRelease Year:\n" + "-".repeat(13) + "\n" + movieObj.Year);
+                    console.log("\n" + movieObj.Ratings[0].Source + " Rating:\n" + "-".repeat(31) + "\n" + movieObj.Ratings[0].Value);
+                    if (movieObj.Ratings[1]) {
+                    console.log("\n" + movieObj.Ratings[1].Source + " Rating:\n" + "-".repeat(23) + "\n" + movieObj.Ratings[1].Value);
+                    } else {
+                        console.log("\nRotten Tomatoes Rating:\n" + "-".repeat(23) + "\nThe selection you entered does not have a rating on Rotten Tomatoes");
+                    }
+                    console.log("\nCountry of Origin:\n" + "-".repeat(18) + "\n" + movieObj.Country);
+                    console.log("\nLanguage:\n" + "-".repeat(9) + "\n" + movieObj.Language);
+                    console.log("\nPlot Summary:\n" + "-".repeat(13) + "\n" + movieObj.Plot);
+                    console.log("\nStarring:\n" + "-".repeat(9) + "\n" + movieObj.Actors);
             })
             .catch(function (err) {
                 console.log(err);
