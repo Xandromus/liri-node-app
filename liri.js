@@ -13,6 +13,7 @@ let params = { screen_name: 'basementavatars', count: 20, tweet_mode: 'extended'
 
 let inputString = process.argv;
 let operand = inputString[2];
+let trackName = inputString.slice(3).join(" ");
 
 // if (operand === "my-tweets") {
 //     client.get('statuses/user_timeline/', params, function (error,
@@ -32,7 +33,8 @@ let operand = inputString[2];
 
 switch (operand) {
     case "my-tweets":
-        client.get('statuses/user_timeline/', params)
+        client
+            .get('statuses/user_timeline/', params)
             .then(function (tweets) {
                 let counter = tweets.length;
                 console.log("The last " + counter + " tweets from " + tweets[0].user.name + " in ascending order:\n" + "-".repeat(60));
@@ -48,5 +50,28 @@ switch (operand) {
             })
         break;
     case "spotify-this-song":
+        if (!trackName) {
+            trackName = "ace of base the sign";
+        }
+        spotify
+            .search({ type: 'track', query: trackName, limit: 1 })
+            .then(function (response) {
+                let trackObj = JSON.parse(JSON.stringify(response.tracks.items[0], null, 2));
+                console.log("Artist(s):\n" + "-".repeat(10));
+                trackObj.artists.forEach(function (artist) {
+                    console.log(artist.name);
+                });
+                console.log("\nSong Title:\n" + "-".repeat(11) + "\n" + trackObj.name);
+                console.log("\nAlbum Title:\n" + "-".repeat(12) + "\n" + trackObj.album.name);
+                if (trackObj.preview_url !== null) {
+                    console.log("\nPreview Link:\n" + "-".repeat(13) + "\n" + trackObj.preview_url);
+                } else {
+                    console.log("\nPreview Link:\n" + "-".repeat(13) + "\nNo preview available for this song");
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+        break;
 }
 
