@@ -86,19 +86,23 @@ function movieThis() {
     rp(queryUrl)
         .then(response => {
             let movieObj = JSON.parse(response);
-            console.log("\nHere's a summary of the movie you searched for:\n" + "-".repeat(47));
-            console.log("\nTitle:\n" + "-".repeat(6) + "\n" + movieObj.Title);
-            console.log("\nRelease Year:\n" + "-".repeat(13) + "\n" + movieObj.Year);
-            console.log("\n" + movieObj.Ratings[0].Source + " Rating:\n" + "-".repeat(31) + "\n" + movieObj.Ratings[0].Value);
-            if (movieObj.Ratings[1]) {
-                console.log("\n" + movieObj.Ratings[1].Source + " Rating:\n" + "-".repeat(23) + "\n" + movieObj.Ratings[1].Value);
+            if (movieObj.Error === undefined) {
+                console.log("\nHere's a summary of the movie you searched for:\n" + "-".repeat(47));
+                console.log("\nTitle:\n" + "-".repeat(6) + "\n" + movieObj.Title);
+                console.log("\nRelease Year:\n" + "-".repeat(13) + "\n" + movieObj.Year);
+                console.log("\n" + movieObj.Ratings[0].Source + " Rating:\n" + "-".repeat(31) + "\n" + movieObj.Ratings[0].Value);
+                if (movieObj.Ratings[1]) {
+                    console.log("\n" + movieObj.Ratings[1].Source + " Rating:\n" + "-".repeat(23) + "\n" + movieObj.Ratings[1].Value);
+                } else {
+                    console.log("\nRotten Tomatoes Rating:\n" + "-".repeat(23) + "\nThe selection you entered does not have a rating on Rotten Tomatoes");
+                }
+                console.log("\nCountry of Origin:\n" + "-".repeat(18) + "\n" + movieObj.Country);
+                console.log("\nLanguage:\n" + "-".repeat(9) + "\n" + movieObj.Language);
+                console.log("\nPlot Summary:\n" + "-".repeat(13) + "\n" + movieObj.Plot);
+                console.log("\nStarring:\n" + "-".repeat(9) + "\n" + movieObj.Actors);
             } else {
-                console.log("\nRotten Tomatoes Rating:\n" + "-".repeat(23) + "\nThe selection you entered does not have a rating on Rotten Tomatoes");
+                console.log("No movie found. Try searching again.");
             }
-            console.log("\nCountry of Origin:\n" + "-".repeat(18) + "\n" + movieObj.Country);
-            console.log("\nLanguage:\n" + "-".repeat(9) + "\n" + movieObj.Language);
-            console.log("\nPlot Summary:\n" + "-".repeat(13) + "\n" + movieObj.Plot);
-            console.log("\nStarring:\n" + "-".repeat(9) + "\n" + movieObj.Actors);
         })
         .catch(err => console.log(err))
 }
@@ -125,5 +129,5 @@ function random() {
 }
 
 function log() {
-            return fs.appendFile('log.txt', moment().format('MMMM Do YYYY, h:mm:ss A') + "\n" + inputString.slice(2).join(" ") + "\n\n");
+    return fs.appendFile('log.txt', moment().format('MMMM Do YYYY, h:mm:ss A') + "\n" + inputString.slice(2).join(" ") + "\n\n");
 }
