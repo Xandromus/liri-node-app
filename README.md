@@ -9,11 +9,11 @@ LIRI can take one of four user commands:
 
 1. my-tweets
 
-    - This command displays the 20 most recent tweets from the selected Twitter user's timeline. This information can be adjusted by adding a .env file with a Twitter key and secret and changing the screen name parameter. The Tweets are displayed in ascending order from 1 to 20. The time stamp is formatted through the moment-js library.
+    - This command displays the 20 most recent tweets and the time when they were created from the selected Twitter user's timeline. This information can be adjusted by adding a .env file with a Twitter key and secret and changing the screen name parameter. The Tweets are displayed in ascending order from 1 to 20. The timestamp is formatted through the moment-js library.
 
 2. spotify-this-song *(song search term)*
 
-    - This command uses Spotify's API to allow the user to search for a song. It then displays the song title, artist(s), a preview link (if available), and the albumm title. If the user leaves the song input blank, the command will default to the song "The Sign" by Ace of Base.
+    - This command uses Spotify's API to allow the user to search for a song. It then displays the song title, artist(s), a preview link (if available), and the album title. If the user leaves the song input blank, the command will default to the song "The Sign" by Ace of Base.
 
 3. movie-this *(movie search term)*
 
@@ -21,9 +21,9 @@ LIRI can take one of four user commands:
 
 4. do-what-it-says
 
-    - This command reads data from a text file (random.txt), which contains one of the three previous command lines as well as a search term (if the command can take one). It uses this information to then run the command. The data in the text file can be adjusted to run any of the commands as long as it includes a comma separator and no whitespace when a search term is provided:
+    - This command reads data from a text file (random.txt), which contains one of the three previous command lines as well as a search term if the command can take one. It uses this information to then run the command. The data in the text file can be adjusted to run any of the commands as long as it includes a comma separator and no whitespace when a search term is provided:
 
-    `command,"(search term)"`
+        `command,"(search term)"`
 
 Finally, each user command is logged to a text file (log.txt) with a timestamp formatted by the moment-js library.
 
