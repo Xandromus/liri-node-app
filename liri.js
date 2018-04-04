@@ -19,29 +19,6 @@ let command = inputString[2];
 let trackName = inputString.slice(3).join(" ");
 let movieName = inputString.slice(3).join(" ");
 
-// switch to handle various user commands and log the commands to a text file
-switch (command) {
-    case "my-tweets":
-        myTweets();
-        log();
-        break;
-
-    case "spotify-this-song":
-        spotifyThis();
-        log();
-        break;
-
-    case "movie-this":
-        movieThis();
-        log();
-        break;
-
-    case "do-what-it-says":
-        random();
-        log();
-        break;
-}
-
 // function to display my last 20 tweets
 function myTweets() {
     // Twitter parameters
@@ -175,4 +152,27 @@ function random() {
 // function to log each user command with a timestamp to a text file
 function log() {
     return fs.appendFile('log.txt', moment().format('MMMM Do YYYY, h:mm:ss A') + "\n" + inputString.slice(2).join(" ") + "\n\n");
+}
+
+// switch to handle various user commands and log the commands to a text file
+switch (command) {
+    case "my-tweets":
+        myTweets();
+        log();
+        break;
+
+    case "spotify-this-song":
+        spotifyThis();
+        log();
+        break;
+
+    case "movie-this":
+        movieThis();
+        log();
+        break;
+
+    case "do-what-it-says":
+        random();
+        log();
+        break;
 }
