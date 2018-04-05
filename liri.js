@@ -55,7 +55,7 @@ function spotifyThis() {
 
             // print the song information if Spotify search yields a result
             if (JSON.stringify(response.tracks.items[0]) != undefined) {
-                let trackObj = JSON.parse(JSON.stringify(response.tracks.items[0], null, 2));
+                let trackObj = response.tracks.items[0];
                 console.log("\nSpotify Song Information:\n" + "-".repeat(25) + "\n");
                 console.log("Artist(s):\n" + "-".repeat(10));
                 trackObj.artists.forEach(function (artist) {
